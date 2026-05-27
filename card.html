@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Gift for Veronika</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: #1a0d04;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+  font-family: 'Cormorant Garamond', serif;
+}
+
+/* ── The Card ── */
+.card {
+  background: #FDF6E8;
+  width: 100%;
+  max-width: 480px;
+  position: relative;
+  box-shadow:
+    0 0 0 1px rgba(201,168,76,0.3),
+    0 8px 40px rgba(0,0,0,0.6),
+    0 0 80px rgba(201,168,76,0.15);
+}
+
+.border-outer { position:absolute; inset:9px; border:1.5px solid #C9A84C; pointer-events:none; z-index:2; }
+.border-inner  { position:absolute; inset:15px; border:0.5px solid rgba(201,168,76,0.35); pointer-events:none; z-index:2; }
+
+/* Corner ornaments */
+.corner { position:absolute; width:36px; height:36px; z-index:3; }
+.corner svg { width:100%; height:100%; }
+.c-tl { top:4px; left:4px; }
+.c-tr { top:4px; right:4px; transform:scaleX(-1); }
+.c-bl { bottom:4px; left:4px; transform:scaleY(-1); }
+.c-br { bottom:4px; right:4px; transform:scale(-1,-1); }
+
+.content {
+  padding: 52px 44px 40px;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+/* Top label */
+.top-label {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 5px;
+  color: #C9A84C;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  opacity: 0.85;
+}
+
+/* Name */
+.recipient-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 58px;
+  font-style: italic;
+  font-weight: 700;
+  color: #2D1505;
+  line-height: 1;
+  margin-bottom: 4px;
+  letter-spacing: -1px;
+}
+
+.occasion {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-style: italic;
+  color: #C9A84C;
+  letter-spacing: 1px;
+  margin-bottom: 28px;
+}
+
+/* Divider */
+.divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, #C9A84C, transparent);
+  margin: 0 auto 28px;
+  width: 75%;
+}
+
+/* ── PRIMARY BUTTON ── */
+.watch-btn {
+  display: block;
+  width: 100%;
+  padding: 18px 24px;
+  background: linear-gradient(135deg, #C9A84C, #E8C97A, #C9A84C);
+  border: none;
+  text-decoration: none;
+  margin-bottom: 10px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 20px rgba(201,168,76,0.35);
+}
+.watch-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(201,168,76,0.5);
+}
+.watch-btn:active { transform: translateY(0); }
+.watch-btn-icon {
+  font-size: 22px;
+  display: block;
+  margin-bottom: 4px;
+  color: #2D1505;
+}
+.watch-btn-text {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  letter-spacing: 4px;
+  color: #2D1505;
+  text-transform: uppercase;
+  font-weight: 700;
+  display: block;
+}
+.watch-btn-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  font-style: italic;
+  color: rgba(45,21,5,0.65);
+  display: block;
+  margin-top: 3px;
+}
+
+/* OR divider */
+.or-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+.or-line { flex:1; height:1px; background:rgba(201,168,76,0.25); }
+.or-text {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: rgba(45,21,5,0.35);
+  text-transform: uppercase;
+}
+
+/* QR section */
+.qr-label {
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  letter-spacing: 4px;
+  color: rgba(45,21,5,0.4);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+#qr {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+#qr canvas, #qr img {
+  border: 8px solid white;
+  outline: 1px solid rgba(201,168,76,0.3);
+  display: block;
+}
+
+.qr-instruction {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  font-style: italic;
+  color: rgba(45,21,5,0.45);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+/* Footer */
+.card-footer {
+  padding-top: 18px;
+  border-top: 1px solid rgba(201,168,76,0.25);
+}
+.footer-from {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  font-style: italic;
+  color: rgba(45,21,5,0.5);
+  margin-bottom: 5px;
+}
+.footer-names {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: #C9A84C;
+  margin-bottom: 5px;
+}
+.footer-date {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 12px;
+  font-style: italic;
+  color: rgba(45,21,5,0.35);
+}
+
+/* Print / save bar */
+.action-bar {
+  max-width: 480px;
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+.action-btn {
+  flex: 1;
+  padding: 11px;
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 1px solid rgba(201,168,76,0.35);
+  background: rgba(201,168,76,0.1);
+  color: #C9A84C;
+  transition: background 0.2s;
+}
+.action-btn:hover { background: rgba(201,168,76,0.25); }
+.action-btn.primary { background: rgba(201,168,76,0.2); border-color: rgba(201,168,76,0.6); }
+
+.tip {
+  max-width: 480px;
+  width: 100%;
+  margin-top: 14px;
+  font-family: 'Helvetica Neue', sans-serif;
+  font-size: 11px;
+  color: rgba(240,230,200,0.3);
+  text-align: center;
+  line-height: 1.8;
+  letter-spacing: 0.5px;
+}
+
+@media print {
+  body { background: white; padding: 0; min-height: auto; }
+  .action-bar, .tip { display: none !important; }
+  .card { box-shadow: none; max-width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<div style="display:flex;flex-direction:column;align-items:center;width:100%;">
+
+  <!-- THE CARD -->
+  <div class="card" id="card">
+    <div class="border-outer"></div>
+    <div class="border-inner"></div>
+
+    <!-- Corners -->
+    <div class="corner c-tl"><svg viewBox="0 0 36 36" fill="none"><path d="M3 33L3 3L33 3" stroke="#C9A84C" stroke-width="1.2"/><circle cx="3" cy="3" r="2.5" fill="#C9A84C"/><path d="M10 3L10 10L3 10" stroke="#C9A84C" stroke-width="0.6" opacity="0.5"/></svg></div>
+    <div class="corner c-tr"><svg viewBox="0 0 36 36" fill="none"><path d="M3 33L3 3L33 3" stroke="#C9A84C" stroke-width="1.2"/><circle cx="3" cy="3" r="2.5" fill="#C9A84C"/><path d="M10 3L10 10L3 10" stroke="#C9A84C" stroke-width="0.6" opacity="0.5"/></svg></div>
+    <div class="corner c-bl"><svg viewBox="0 0 36 36" fill="none"><path d="M3 33L3 3L33 3" stroke="#C9A84C" stroke-width="1.2"/><circle cx="3" cy="3" r="2.5" fill="#C9A84C"/><path d="M10 3L10 10L3 10" stroke="#C9A84C" stroke-width="0.6" opacity="0.5"/></svg></div>
+    <div class="corner c-br"><svg viewBox="0 0 36 36" fill="none"><path d="M3 33L3 3L33 3" stroke="#C9A84C" stroke-width="1.2"/><circle cx="3" cy="3" r="2.5" fill="#C9A84C"/><path d="M10 3L10 10L3 10" stroke="#C9A84C" stroke-width="0.6" opacity="0.5"/></svg></div>
+
+    <div class="content">
+      <div class="top-label">✦ A Special Gift ✦</div>
+      <div class="recipient-name">Veronika</div>
+      <div class="occasion">Forty &amp; Glorious · 19th June</div>
+
+      <div class="divider"></div>
+
+      <!-- PRIMARY: Big clickable button -->
+      <a class="watch-btn" href="https://babaanalytix-commits.github.io/veronika-forty" target="_blank">
+        <span class="watch-btn-icon">▶</span>
+        <span class="watch-btn-text">Watch Your Story</span>
+        <span class="watch-btn-sub">Tap here to open your gift</span>
+      </a>
+
+      <!-- OR -->
+      <div class="or-row">
+        <div class="or-line"></div>
+        <div class="or-text">or scan</div>
+        <div class="or-line"></div>
+      </div>
+
+      <!-- SECONDARY: QR code -->
+      <div class="qr-label">Scan with your phone camera</div>
+      <div id="qr"></div>
+      <div class="qr-instruction">
+        Point your camera at the code above<br>
+        to open on another screen
+      </div>
+
+      <!-- Footer -->
+      <div class="card-footer">
+        <div class="footer-from">With all our love,</div>
+        <div class="footer-names">Aidan &nbsp;·&nbsp; Ava &nbsp;·&nbsp; Aimee &nbsp;·&nbsp; Ade</div>
+        <div class="footer-date">19th June — Forty &amp; Glorious</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action buttons (hidden on print) -->
+  <div class="action-bar">
+    <button class="action-btn" onclick="window.print()">🖨 Print as PDF</button>
+    <button class="action-btn primary" onclick="copyLink()">🔗 Copy Link</button>
+    <button class="action-btn" onclick="shareCard()">📤 Share</button>
+  </div>
+
+  <div class="tip" id="tip">
+    💡 To send on WhatsApp: click "Print as PDF" → save → attach the PDF in WhatsApp<br>
+    The gold button inside the PDF is clickable — tap it to open the story directly
+  </div>
+
+</div>
+
+<script>
+const STORY_URL = 'https://babaanalytix-commits.github.io/veronika-forty';
+
+// Generate QR code
+new QRCode(document.getElementById('qr'), {
+  text: STORY_URL,
+  width: 160,
+  height: 160,
+  colorDark: '#2D1505',
+  colorLight: '#FDF6E8',
+  correctLevel: QRCode.CorrectLevel.H
+});
+
+function copyLink() {
+  navigator.clipboard.writeText(STORY_URL)
+    .then(() => alert('✓ Link copied!\n\nPaste it in WhatsApp, SMS, or email — anyone who taps it will see the story.'))
+    .catch(() => prompt('Copy this link:', STORY_URL));
+}
+
+function shareCard() {
+  if (navigator.share) {
+    navigator.share({
+      title: "A gift for Veronika — Forty & Glorious",
+      text: "Tap to watch a story made just for you ✦",
+      url: STORY_URL
+    }).catch(() => {});
+  } else {
+    copyLink();
+  }
+}
+</script>
+</body>
+</html>
